@@ -15,14 +15,14 @@ export NODE_PATH={node_paths}
 # Run it but wrap all calls to paths in a call to find. The call to find will
 # search recursively through the filesystem to find the appropriate runfiles
 # directory if that is necessary.
-cd $(find . | grep -m 1 "{node_bin}" | sed 's|{node_bin}$||') && exec "{node_bin}" "{script_path}" $@
+cd $(find . | grep -m 1 "{node_bin}" | sed 's|{node_bin}$||') && "{node_bin}" "{script_path}" $@
 """
 
 
 def _get_node_modules_dir_from_package_json(file):
     filename = str(file)
     parts = filename.split("]")
-    prefix = parts[0][len("Artifact:[["):]
+    prefix = parts[0][len("File:[["):]
     middle = parts[1]
     suffix = parts[2].split("/")
     d = "/".join([prefix, middle] + suffix[0:-3] + ["node_modules"])
@@ -32,7 +32,7 @@ def _get_node_modules_dir_from_package_json(file):
 def _get_node_modules_dir_from_sourcefile(file):
     bin = str(file)
     parts = bin.partition("[source]]")
-    prefix = parts[0][len("Artifact:["):]
+    prefix = parts[0][len("File:["):]
     suffix_parts = parts[2].split("/")
     return "/".join([prefix] + suffix_parts)
 
